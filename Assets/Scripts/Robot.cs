@@ -5,6 +5,9 @@ using UnityEngine;
 public class Robot : MonoBehaviour
 {
     [SerializeField]
+    GameObject missileprefab;
+
+    [SerializeField]
     private string robotType;
 
     public int health;
@@ -36,24 +39,55 @@ public class Robot : MonoBehaviour
         //2
         if (isDead)
         {
-            //3
-            transform.LookAt(player);
-
-            //4
-            agent.SetDestination(player.position);
-
-            //5
-            if(Vector3.Distance(transform.position, player.position) < range && Time.time - timeLastFired > fireRate)
-            {
-                //6 
-                timeLastFired = Time.time;
-                fire();
-            }
+            return;
         }
+
+        //3
+        transform.LookAt(player);
+
+        //4
+        agent.SetDestination(player.position);
+
+        //5
+        if(Vector3.Distance(transform.position, player.position) < range && Time.time - timeLastFired > fireRate)
+        {
+            //6 
+            timeLastFired = Time.time;
+            fire();
+        }
+        
     }
 
     private void fire()
     {
+        GameObject missile = Instantiate(missileprefab);
+        missile.transform.position = missileFireSpot.transform.position;
+        missile.transform.rotation = missileFireSpot.transform.rotation;
         robot.Play("Fire");
+    }
+
+
+    public void TakeDamage(int amount)
+    {
+        if(isDead)
+        {
+            return;
+        }
+
+        health -= amount;
+
+        if(health <= 0)
+        {
+            isDead = true;
+            robot.Play("Die");
+            StartCoroutine("DestroyRobot");
+        }
+    }
+
+
+    IEnumerator DestroyRobot()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Destroy(gameObject);
     }
 }
