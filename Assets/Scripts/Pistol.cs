@@ -8,7 +8,7 @@ public class Pistol : Gun
     {
         base.Update();
         //Shotgun & Pistol have semi-auto fire rate
-        if(Input.GetMouseButtonDown(0) && (Time.time - lastFireTime) > fireRate)
+        if (Input.GetMouseButtonDown(0) && (Time.time - lastFireTime) > fireRate)
         {
             lastFireTime = Time.time;
             Fire();
