@@ -37,15 +37,17 @@ public class Player : MonoBehaviour
             if (effectiveArmour > 0)
             {
                 armour = effectiveArmour / 2;
+                gameUI.SetArmourText(armour);
                 return;
             }
             armour = 0;
+            gameUI.SetArmourText(armour);
         }
 
         health -= healthDamage;
-        Debug.Log("Health is " + health);
+        gameUI.SetHealthText(health);
 
-        if(health <= 0)
+        if (health <= 0)
         {
             Debug.Log("GameOver");
         }
@@ -55,31 +57,55 @@ public class Player : MonoBehaviour
     private void pickupHealth()
     {
         health += 50;
+
         if (health > 200)
         {
             health = 200;
         }
+
+        gameUI.SetPickUpText("Health picked up + 50 Health");
+        gameUI.SetHealthText(health);
     } 
 
     private void pickupArmour()
     {
         armour += 15;
+        gameUI.SetPickUpText("Armour picked up + 15 armour");
+        gameUI.SetArmourText(armour);
     }
 
     // 2
     private void pickupAssaultRifleAmmo()
     {
         ammo.AddAmmo(Constants.AssaultRifle, 50);
+        gameUI.SetPickUpText("Assault rifle ammo picked up + 50 ammo");
+
+        if (gunEquipper.GetActiveWeapon().tag == Constants.AssaultRifle)
+        {
+            gameUI.SetAmmoText(ammo.GetAmmo(Constants.AssaultRifle));
+        }
     } 
 
     private void pickupPistolAmmo()
     {
         ammo.AddAmmo(Constants.Pistol, 20);
+        gameUI.SetPickUpText("Pistol ammo picked up + 20 ammo");
+
+        if (gunEquipper.GetActiveWeapon().tag == Constants.Pistol)
+        {
+            gameUI.SetAmmoText(ammo.GetAmmo(Constants.Pistol));
+        }
     }
 
     private void pickupShotgunAmmo()
     {
         ammo.AddAmmo(Constants.Shotgun, 10);
+        gameUI.SetPickUpText("Shotgun ammo picked up + 10 ammo");
+
+        if (gunEquipper.GetActiveWeapon().tag == Constants.Shotgun)
+        {
+            gameUI.SetAmmoText(ammo.GetAmmo(Constants.Shotgun));
+        }
     }
 
     public void PickUpItem(int pickupType)
