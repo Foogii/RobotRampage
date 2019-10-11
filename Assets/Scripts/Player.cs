@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     private GunEquipper gunEquipper;
     private Ammo ammo;
 
+    public Game game;
+    public AudioClip playerDead;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +35,7 @@ public class Player : MonoBehaviour
             int effectiveArmour = armour * 2;
             effectiveArmour -= healthDamage;
 
-            // If there is still armour, don't need to process
-            // health damage
+            // If there is still armour, don't need to process health damage
             if (effectiveArmour > 0)
             {
                 armour = effectiveArmour / 2;
@@ -49,7 +51,8 @@ public class Player : MonoBehaviour
 
         if (health <= 0)
         {
-            Debug.Log("GameOver");
+            GetComponent<AudioSource>().PlayOneShot(playerDead);
+            game.GameOver();
         }
     }
 
